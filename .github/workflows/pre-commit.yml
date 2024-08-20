@@ -1,0 +1,69 @@
+# YAML document start
+---
+name: Pre-commit
+
+
+on:
+  pull_request:
+    branches:
+      - "main"
+
+permissions:
+  contents: read
+
+jobs:
+  pre-commit:
+    permissions:
+      contents: write  # for pre-commit/action to push back fixes to PR branch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - run: >-
+          git fetch --no-tags --prune --depth=1 origin
+          +refs/heads/*:refs/remotes/origin/*
+
+      - name: Get changed files
+        id: file_changes
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          SHA: ${{ github.sha }}
+        run: |
+          export DIFF=$(git diff --name-only "origin/$BASE_REF" "$SHA")
+          echo "Diff between $BASE_REF and $SHA"
+          echo "files=$( echo "$DIFF" | tr '\n' ' ' )" >> $GITHUB_OUTPUT
+
+      # Needed for pre-commit fix push to succeed
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Execute pre-commit
+        id: pre-commit
+        uses: pre-commit/action@v3.0.1
+        continue-on-error: true
+        env:
+          SKIP: no-commit-to-branch
+        with:
+          extra_args: >-
+            --color=always
+            --show-diff-on-failure
+            --files ${{ steps.file_changes.outputs.files }}
+
+      # Push fixes if pre-commit made changes
+      # (indicated by failure + file changes)
+      - name: Push fixes
+        if: steps.pre-commit.outcome == 'failure'
+        uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actor
+          message: '[pre-commit] Autofix violations'

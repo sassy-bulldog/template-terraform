@@ -1,8 +1,10 @@
+/*
 data "spacelift_account" "this" {}
 
 data "spacelift_space" "root" {
   space_id = "root"
 }
+*/
 
 data "spacelift_current_stack" "this" {}
 
@@ -10,9 +12,11 @@ data "spacelift_stack" "this" {
   stack_id = data.spacelift_current_stack.this.id
 }
 
+/*
 locals {
   github_app_namespace = null
 }
+*/
 
 resource "spacelift_stack" "managed" {
   name        = "Managed stack"
@@ -79,7 +83,7 @@ data "spacelift_ips" "ips" {}
 # Note how we explicitly set the "write_only" bit for this file to "false".
 # Thanks to that, you can download the file from the Spacelift GUI.
 #
-# You can read more about mounted files here: 
+# You can read more about mounted files here:
 #
 # https://docs.spacelift.io/concepts/environment#mounted-files
 resource "spacelift_mounted_file" "stack-plaintext-file" {
