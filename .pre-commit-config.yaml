@@ -47,7 +47,7 @@ repos:
         args:
           - "--config=.terraform-docs.yaml"
           - "--lockfile=false"
-          - "--recursive"
+          # - "--recursive"
           # - "--recursive-path=examples/"
           - "./"
   - repo: https://github.com/markdownlint/markdownlint
