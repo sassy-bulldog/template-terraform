@@ -1,7 +1,11 @@
 ---
 # Name as it appears on the Actions tab of GitHub
 # (for current repo; this get's ignored if called from another repo)
+---
 name: Lint Code
+
+permissions:
+  contents: read
 
 # Controls when the workflow will run
 on:
@@ -17,7 +21,8 @@ on:
       - alpha
   pull_request_target:
 
-# Down scope as necessary via
+# Down scope as necessary via 
+# yamllint disable-line rule:line-length
 # https://docs.github.com/en/actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token
 permissions:
   checks: write
@@ -27,5 +32,5 @@ jobs:
   run-terraform-linters:
     name: terraform
     # yamllint disable-line rule:line-length
-    uses: sassy-bulldog/.github/.github/workflows/lint-terraform.yml@v0.2.2  # x-release-please-version
+    uses: sassy-bulldog/.github/.github/workflows/lint-terraform.yml@v0.2.2 # x-release-please-version
     secrets: inherit
