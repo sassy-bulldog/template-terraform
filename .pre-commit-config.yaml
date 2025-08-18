@@ -60,15 +60,10 @@ repos:
   # Optionally, add yamllint for YAML files
   - repo: https://github.com/adrienverge/yamllint.git
     rev: v1.37.1  # Use the latest stable version
-      - id: check-added-large-files
-
-  # Optionally, add yamllint for YAML files
-  - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.37.1  # Use the latest stable version
     hooks:
       - id: yamllint
 
-  - repo: https://github.com/markdownlint/markdownlint
-    rev: v0.13.0
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.45.0
     hooks:
-      - id: markdownlint
+      - id: markdownlint-fix
