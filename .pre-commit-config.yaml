@@ -4,7 +4,23 @@
 # For more information, see:
 #   https://pre-commit.com/
 ---
+fail_fast: false
+minimum_pre_commit_version: "2.6.0"
+
+ci:
+  autofix_commit_msg: 'chore(pre-commit.ci): Auto fixes [...]'
+  autoupdate_commit_msg: 'chore(pre-commit.ci): Auto update of pre-commit hooks'
+  skip:
+    - terraform_fmt_docker
+    - terraform_validate_docker
+    - terraform_tflint_docker
+    - terraform_docs_docker
+    - terraform_checkov_docker
+    - terraform_trivy_docker
+
 repos:
+  # Fork from https://github.com/antonbabenko/pre-commit-terraform
+  # His does not yet use docker images
   - repo: https://github.com/actuarysailor/pre-commit-terraform
     rev: "1815705d890046e053875e8b75e30965f9fa62e9"
     hooks:
@@ -47,11 +63,7 @@ repos:
     hooks:
       - id: yamllint
 
-ci:
-  skip:
-    - terraform_fmt_docker
-    - terraform_validate_docker
-    - terraform_tflint_docker
-    - terraform_docs_docker
-    - terraform_checkov_docker
-    - terraform_trivy_docker
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.45.0
+    hooks:
+      - id: markdownlint-fix
