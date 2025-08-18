@@ -17,7 +17,7 @@ jobs:
       contents: write  # for pre-commit/action to push back fixes to PR branch
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4  # yamllint disable-line rule:line-length
         with:
           persist-credentials: false
 
@@ -35,21 +35,21 @@ jobs:
           echo "Diff between $BASE_REF and $SHA"
           echo "files=$( echo "$DIFF" | tr '\n' ' ' )" >> $GITHUB_OUTPUT
 
-      # Needed for pre-commit fix push to succeed
-      - uses: actions/checkout@v4
+        # Needed for pre-commit fix push to succeed
+      - uses: actions/checkout@v4  # yamllint disable-line rule:line-length
         with:
           fetch-depth: 0
           persist-credentials: true
           ref: ${{ github.head_ref }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5  # yamllint disable-line rule:line-length
         with:
           python-version: '3.11'
 
       - name: Execute pre-commit
         id: pre-commit
-        uses: pre-commit/action@v3.0.1
+        uses: pre-commit/action@v3.0.1  # yamllint disable-line rule:line-length
         continue-on-error: true
         env:
           SKIP: no-commit-to-branch

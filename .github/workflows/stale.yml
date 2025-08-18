@@ -1,5 +1,10 @@
-# Name as it appears on the Actions tab of GitHub (for current repo; this get's ignored if called from another repo)
+---
+# Name as it appears on the Actions tab of GitHub
+# (for current repo; this get's ignored if called from another repo)
 name: 'Issue & PR Maintenance'
+# Minimal permissions for Checkov compliance
+permissions:
+  contents: read
 
 # Controls when the workflow will run
 on:
@@ -15,5 +20,6 @@ on:
 jobs:
   stale:
     name: Shared Workflow
-    uses: sassy-bulldog/.github/.github/workflows/stale.yml@v0.2.2 # x-release-please-version
+    # yamllint disable-line rule:line-length
+    uses: sassy-bulldog/.github/.github/workflows/stale.yml@v0.2.2  # x-release-please-version
     secrets: inherit
